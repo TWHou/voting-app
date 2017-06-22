@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import LoginControl from './LoginControl';
 
@@ -17,10 +18,14 @@ class Header extends Component {
             <NavLink activeClassName='active' to='/polls' exact className="nav-link p-2">All Polls</NavLink>
           </li>
         </ul>
-        <LoginControl />
+        <LoginControl username={this.props.username} />
       </nav>
     );
   }
 }
+
+Header.propTypes = {
+  username: PropTypes.string
+};
 
 export default Header;

@@ -4,10 +4,13 @@ import Header from './Header.js';
 import Main from './Main.js';
 
 class App extends Component {
+  state = {
+    username: 'user'
+  }
   render() {
     return (
       <div>
-        <Header />
+        <Header username={this.state.username} />
         <Main />
       </div>
     );
