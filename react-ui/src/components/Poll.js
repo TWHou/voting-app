@@ -5,14 +5,20 @@ class Poll extends Component {
   render() {
     return (
       <div>
-        Poll options and result.
+        <h2>{this.props.title}</h2>
+        {this.props.options.map(option =>
+          <p key={option.name}>
+            {option.name}
+          </p>
+        )}
       </div>
     );
   }
 }
 
 Poll.propTypes = {
-
+  title: PropTypes.string.isRequired,
+  options: PropTypes.array.isRequired
 };
 
 export default Poll;

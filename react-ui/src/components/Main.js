@@ -11,7 +11,7 @@ import Register from './Register';
 class Main extends Component {
   render() {
     return (
-      <main>
+      <main className="container">
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route path='/polls' component={Polls}/>
