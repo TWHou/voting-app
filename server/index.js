@@ -1,17 +1,44 @@
 const express = require('express');
 const path = require('path');
+const passport = require('passport');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+
+const apiRouter = require('./routes/api');
+const authRouter = require('./routes/auth');
+
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.info('connection successful'))
+  .catch((err) => console.error(err));
+
+// pass passport for configuration
+require('./config/passport')(passport);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(session());
 
 // Priority serve any static files.
 app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
 // Answer API requests.
-app.get('/api', function (req, res) {
-  res.set('Content-Type', 'application/json');
-  res.send('{"message":"Hello from the custom server!"}');
-});
+app.use('/api', apiRouter);
+app.use('/auth', authRouter);
 
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(request, response) {
