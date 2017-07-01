@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import LoginControl from './LoginControl';
+import UserMenu from './UserMenu';
 
 class Header extends Component {
 
   render() {
+    const username = this.props.username;
     return (
       <nav className="navbar navbar-light bg-faded flex-row align-items-baseline">
         <h1 className="navbar-brand mb-0">Pollster</h1>
@@ -18,7 +19,10 @@ class Header extends Component {
             <NavLink activeClassName='active' to='/polls' exact className="nav-link p-2">All Polls</NavLink>
           </li>
         </ul>
-        <LoginControl username={this.props.username} />
+        <div className="d-inline-flex ml-auto align-items-baseline">
+          {username ? <UserMenu username={username}/> : 'Welcome'}
+          {username ? <Link to="/logout" className="btn">Logout</Link> : <Link to="/login" className="btn">Login</Link>}
+        </div>
       </nav>
     );
   }

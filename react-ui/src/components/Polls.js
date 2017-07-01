@@ -61,7 +61,7 @@ class Polls extends Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getPolls();
   }
 

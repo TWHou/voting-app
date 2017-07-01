@@ -6,7 +6,9 @@
     "react-scripts": "0.9.5"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "bootstrap": "^4.0.0-alpha.6",
+    "form-serialize": "^0.7.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.1.1"
