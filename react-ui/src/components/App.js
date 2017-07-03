@@ -29,6 +29,19 @@ class App extends Component {
     });
   }
 
+  doLogin = user => {
+    axios.post('auth/login', user)
+    .then(res => {
+      if (res.token) {
+        localStorage.setItem('token', res.token);
+        this.setState({username: user.username});
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
   render() {
     return (
       <div className="container">
@@ -37,17 +50,20 @@ class App extends Component {
           <Route exact path='/' component={Home}/>
           <Route path='/polls' component={Polls}/>
           <Route path='/user' component={User}/>
-          <Route path='/login' component={Login}/>
+          <Route path='/login' render={() => (
+            this.state.username ? (<Redirect to="/" />) : ( 
+              <Login onLogin={this.doLogin} /> 
+            ))}/>
           <Route path='/logout' component={Logout}/>
           <Route
             path='/register'
             render={() => (
-              this.state.username ? (
-                <Register
+              this.state.username ? (<Redirect to="/" />) : (
+                <Register 
                   onRegister={this.doRegister}
-                  usererr={this.state.usererr}
+                  usererr={this.state.usererr} 
                 />
-              ) : (<Redirect to="/" />)
+              )
             )}
           />
         </main>
