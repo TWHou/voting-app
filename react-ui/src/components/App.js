@@ -42,6 +42,20 @@ class App extends Component {
     });
   }
 
+  doLogout = () => {
+    const token = localStorage.getItem('token');
+    axios.get('auth/logout', {headers: {'Authorization': token}})
+    .then(res => {
+      if (res.status == '200') {
+        localStorage.removeItem('token');
+        this.setState({username: ''});
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
   render() {
     return (
       <div className="container">
@@ -54,7 +68,13 @@ class App extends Component {
             this.state.username ? (<Redirect to="/" />) : ( 
               <Login onLogin={this.doLogin} /> 
             ))}/>
-          <Route path='/logout' component={Logout}/>
+          <Route path='/logout' 
+            render={() => (
+              this.state.username ? (
+                <Logout onLogout={this.doLogout} />
+              ) : (<Redirect to="/" />)
+            )}
+          />
           <Route
             path='/register'
             render={() => (
