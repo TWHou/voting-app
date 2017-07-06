@@ -1,3 +1,5 @@
+require('dotenv').config({path: __dirname + '/.env'});
+
 const express = require('express');
 const path = require('path');
 const passport = require('passport');
@@ -6,10 +8,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
-const apiRouter = require('./routes/api');
-const authRouter = require('./routes/auth');
-
-require('dotenv').config();
+//const apiRouter = require('./routes/api.js');
+const authRouter = require('./routes/auth.js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,11 +19,8 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.info('connection successful'))
   .catch((err) => console.error(err));
 
-// pass passport for configuration
-require('./config/passport')(passport);
-
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({
   secret: process.env.SECRET,
@@ -31,13 +28,15 @@ app.use(session({
   saveUninitialized: false
 }));
 app.use(passport.initialize());
-app.use(session());
+app.use(passport.session());
+// pass passport for configuration
+require('./config/passport')(passport);
 
 // Priority serve any static files.
 app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
 // Answer API requests.
-app.use('/api', apiRouter);
+//app.use('/api', apiRouter);
 app.use('/auth', authRouter);
 
 // All remaining requests return the React app, so it can handle routing.
