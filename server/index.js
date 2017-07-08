@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
-//const apiRouter = require('./routes/api.js');
+const apiRouter = require('./routes/api.js');
 const authRouter = require('./routes/auth.js');
 
 const app = express();
@@ -36,7 +36,7 @@ require('./config/passport')(passport);
 app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
 // Answer API requests.
-//app.use('/api', apiRouter);
+app.use('/api', apiRouter);
 app.use('/auth', authRouter);
 
 // All remaining requests return the React app, so it can handle routing.

@@ -7,7 +7,7 @@ verify.getToken = function(payload) {
 };
 
 verify.verifyUser = function(req, res, next) {
-  const token = req.body.token || req.headers['x-access-token'];
+  const token = req.body.token || req.headers['authorization'];
   if (token) {
     jwt.verify(token, process.env.SECRET, function(err, payload){
       if (err) {

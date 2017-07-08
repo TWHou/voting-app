@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-//import serializeForm from 'form-serialize';
-//import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 class NewPoll extends Component {
   state = {
@@ -30,6 +29,13 @@ class NewPoll extends Component {
     this.setState({options: newOpt});
   }
 
+  handleSubmit = e => {
+    e.preventDefault();
+    const title = this.state.title;
+    const options = this.state.options;
+    this.props.onSubmit({title, options});
+  }
+
   render() {
     const options = this.state.options.map((option, i) => (
       <div className="form-group" key={i}>
@@ -46,7 +52,7 @@ class NewPoll extends Component {
     ));
     return (
       <div>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <div className="form-group">
             <label htmlFor="title">Title</label>
             <input 
@@ -59,6 +65,7 @@ class NewPoll extends Component {
               placeholder="Title for Your Poll" />
           </div>
           {options}
+          <input type="submit" value="Add Poll" />
         </form>
         <button onClick={this.addOpt}>Add Option</button>
         <button onClick={this.removeOpt}>Remove Option</button>
@@ -69,7 +76,7 @@ class NewPoll extends Component {
 }
 
 NewPoll.propTypes = {
-
+  onSubmit: PropTypes.func.isRequired
 };
 
 export default NewPoll;

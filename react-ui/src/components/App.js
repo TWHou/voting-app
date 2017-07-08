@@ -67,7 +67,7 @@ class App extends Component {
         <Header username={this.state.username} />
         <main>
           <Route exact path='/' component={Home}/>
-          <Route path='/polls' component={Polls}/>
+          <Route path='/polls' render={({ history }) => <Polls history={history} />}/>
           <Route path='/user' component={User}/>
           <Route path='/login' render={() => (
             this.state.username ? (<Redirect to="/" />) : ( 
