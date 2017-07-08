@@ -21,7 +21,7 @@ class Header extends Component {
         </ul>
         <div className="d-inline-flex ml-auto align-items-baseline">
           {username ? <UserMenu username={username}/> : 'Welcome'}
-          {username ? <Link to="/logout" className="btn">Logout</Link> : <Link to="/login" className="btn">Login</Link>}
+          {username ? <Link to="/logout" className="btn">Logout</Link> : <div><Link to="/login" className="btn">Login</Link><Link to="/register" className="btn">Sign Up</Link></div>}
         </div>
       </nav>
     );

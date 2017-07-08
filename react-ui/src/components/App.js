@@ -19,8 +19,9 @@ class App extends Component {
   doRegister = user => {
     axios.post('/auth/signup', user)
     .then(res => {
-      if (res.token) {
-        localStorage.setItem('token', res.token);
+      const result = res.data;
+      if (result.token) {
+        localStorage.setItem('token', result.token);
         this.setState({username: user.username});
       }
     })
@@ -30,10 +31,13 @@ class App extends Component {
   }
 
   doLogin = user => {
+    console.info('logging in.....');
     axios.post('auth/login', user)
     .then(res => {
-      if (res.token) {
-        localStorage.setItem('token', res.token);
+      const result = res.data;
+      console.info(result);
+      if (result.token) {
+        localStorage.setItem('token', result.token);
         this.setState({username: user.username});
       }
     })
@@ -46,7 +50,8 @@ class App extends Component {
     const token = localStorage.getItem('token');
     axios.get('auth/logout', {headers: {'Authorization': token}})
     .then(res => {
-      if (res.status == '200') {
+      console.info(res);
+      if (res.status === '200') {
         localStorage.removeItem('token');
         this.setState({username: ''});
       }
@@ -69,9 +74,9 @@ class App extends Component {
               <Login onLogin={this.doLogin} /> 
             ))}/>
           <Route path='/logout' 
-            render={() => (
+            render={({ history }) => (
               this.state.username ? (
-                <Logout onLogout={this.doLogout} />
+                <Logout onLogout={this.doLogout} history={history} />
               ) : (<Redirect to="/" />)
             )}
           />
