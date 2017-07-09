@@ -8,7 +8,7 @@ const getUser = (req, res) => {
   const id = req.payload._id;
   User.findById(id, (err, user) => {
     if (err) {
-      res.status(500).send({error: err});
+      res.status(err.status).send({error: err});
     }
     res.send(user);
   });

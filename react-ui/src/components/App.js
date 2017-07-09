@@ -72,8 +72,9 @@ class App extends Component {
         });
       }
     })
-    .catch((err) => {
-      console.error(err);
+    .catch(() => {
+      localStorage.removeItem('token');
+      this.setState({username: ''});
     });
   };
 
