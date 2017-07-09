@@ -61,6 +61,29 @@ class App extends Component {
     });
   }
 
+  getUser = (token) => {
+    axios.get('api/isloggedin', {headers: {'Authorization': token}})
+    .then(res => {
+      console.info(res);
+      const user = res.data;
+      if (user) {
+        this.setState({
+          username: user.username
+        });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  };
+
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.getUser(token);
+    }
+  }
+  
   render() {
     return (
       <div className="container">

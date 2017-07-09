@@ -2,6 +2,17 @@ const router = require('express').Router();
 
 const Verify = require('./verify');
 const Poll = require('../models/Poll');
+const User = require('../models/User');
+
+const getUser = (req, res) => {
+  const id = req.payload._id;
+  User.findById(id, (err, user) => {
+    if (err) {
+      res.status(500).send({error: err});
+    }
+    res.send(user);
+  });
+};
 
 const addPoll = (req, res) => {
   const id = req.payload._id;
@@ -18,6 +29,7 @@ const addPoll = (req, res) => {
   });
 };
 
+router.get('/isloggedin', Verify.verifyUser, getUser);
 router.post('/new', Verify.verifyUser, addPoll);
 
 module.exports = router;
