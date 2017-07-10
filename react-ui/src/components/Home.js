@@ -62,15 +62,14 @@ class Home extends Component {
   componentWillMount() {
     this.getPolls();
   }
-  
 
   render() {
     return (
       <div>
-        <h3>Latest Poll:</h3>
+        <h5>Latest Poll:</h5>
         <Poll {...this.state.polls[0]} />
         <hr />
-        <h3>More Polls:</h3>
+        <h5>More Polls:</h5>
           <PollList polls={this.state.polls.slice(1)} />
       </div>
     );
