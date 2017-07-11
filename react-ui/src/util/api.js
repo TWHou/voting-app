@@ -7,4 +7,9 @@ api.getPolls = () => {
   .then((res) => res.data.polls);
 };
 
+api.vote = (vote, pollId) => {
+  return axios.post(`/api/vote/${pollId}`, {vote: vote})
+  .then((res) => res.data.poll);
+};
+
 export default api;

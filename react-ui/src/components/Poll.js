@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { Polar } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
+import api from '../util/api';
 
 import VoteForm from './VoteForm';
 
 class Poll extends Component {
 
   handleVote = (vote) => {
-    console.info(vote);
+    api.vote(vote, this.props._id)
+    .then((poll) => {
+      console.log(poll);
+    });
   }
 
   render() {
@@ -35,6 +39,7 @@ class Poll extends Component {
 Poll.propTypes = {
   title: PropTypes.string,
   options: PropTypes.array,
+  _id: PropTypes.string
 };
 
 Poll.defaultProps = {
