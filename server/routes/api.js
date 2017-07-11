@@ -38,6 +38,15 @@ const getPolls = (req, res) => {
   });
 };
 
+const getPoll = (req, res) => {
+  Poll.findById(req.params.pollId, (err, poll) => {
+    if (err) {
+      res.status(500).send({error: err});
+    }
+    res.status(200).send({poll: poll});
+  });
+};
+
 const vote = (req, res) => {
   Poll.findById(req.params.pollId, (err, poll) => {
     if (err) {
@@ -58,8 +67,9 @@ const vote = (req, res) => {
 };
 
 router.get('/isloggedin', Verify.verifyUser, getUser);
-router.post('/new', Verify.verifyUser, addPoll);
 router.get('/polls', getPolls);
+router.get('/poll/:pollId', getPoll);
+router.post('/new', Verify.verifyUser, addPoll);
 router.post('/vote/:pollId', vote);
 
 module.exports = router;

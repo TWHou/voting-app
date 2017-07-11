@@ -26,10 +26,11 @@ class Home extends Component {
   }
 
   render() {
+    const firstPollId = this.state.polls[0] ? this.state.polls[0]._id : '';
     return (
       <div>
         <h5>Latest Poll:</h5>
-        <Poll {...this.state.polls[0]} onVote={this.handleVote} />
+        <Poll pollId={firstPollId} />
         <hr />
         <h5>More Polls:</h5>
           <PollList polls={this.state.polls.slice(1)} />

@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
-//import Poll from './Poll';
 
 class PollList extends Component {
   render() {
     return (
-      <div>
+      <div className="list-group">
         {this.props.polls.map(poll =>
-          <h2 key={poll.title}>
+          <Link
+            key={poll._id}
+            to={`/polls/${poll._id}`}
+            className="list-group-item list-group-item-action"
+          >
             {poll.title}
-          </h2>
+          </Link>
         )}
       </div>
     );
