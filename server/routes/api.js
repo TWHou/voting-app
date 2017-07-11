@@ -29,7 +29,17 @@ const addPoll = (req, res) => {
   });
 };
 
+const getPolls = (req, res) => {
+  Poll.find({}, (err, polls) => {
+    if (err) {
+      res.status(500).send({error: err});
+    }
+    res.status(200).send({polls: polls});
+  });
+};
+
 router.get('/isloggedin', Verify.verifyUser, getUser);
 router.post('/new', Verify.verifyUser, addPoll);
+router.get('/polls', getPolls);
 
 module.exports = router;

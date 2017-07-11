@@ -33,8 +33,13 @@ class Poll extends Component {
 }
 
 Poll.propTypes = {
-  title: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
+  title: PropTypes.string,
+  options: PropTypes.array,
+};
+
+Poll.defaultProps = {
+  title: '',
+  options: []
 };
 
 export default Poll;

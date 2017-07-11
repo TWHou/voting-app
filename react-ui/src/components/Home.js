@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 
 import Poll from './Poll';
 import PollList from './PollList';
+import api from '../util/api';
 
-const FAKEDATA = [
+/*const FAKEDATA = [
   {
     title: 'Favorite Color',
     options: [
@@ -42,25 +43,17 @@ const FAKEDATA = [
     ],
     user: 3
   }
-];
+];*/
 
 class Home extends Component {
-  constructor(props){
-    super(props);
-    this.getPolls = this.getPolls.bind(this);
-    this.state = {
-      polls: []
-    };
+  state = {
+    polls: []
   }
 
-  getPolls(){
-    this.setState({
-      polls: FAKEDATA
+  componentDidMount() {
+    api.getPolls().then((polls) => {
+      this.setState({polls: polls});
     });
-  }
-
-  componentWillMount() {
-    this.getPolls();
   }
 
   render() {
