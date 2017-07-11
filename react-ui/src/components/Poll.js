@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
 import { Polar } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
-import api from '../util/api';
 
 import VoteForm from './VoteForm';
 
 class Poll extends Component {
-
-  handleVote = (vote) => {
-    api.vote(vote, this.props._id)
-    .then((poll) => {
-      console.log(poll);
-    });
-  }
 
   render() {
     const randColor = () => '#'+Math.floor(Math.random()*16777215).toString(16);
@@ -26,7 +18,7 @@ class Poll extends Component {
       <div>
         <h2>{this.props.title}</h2>
         <div className="row">
-          <VoteForm className="col" onVote={this.handleVote} options={options.labels} />
+          <VoteForm className="col" onVote={this.props.onVote} options={options.labels} />
           <div className="col">
             <Polar data={options} />
           </div>
@@ -37,6 +29,7 @@ class Poll extends Component {
 }
 
 Poll.propTypes = {
+  onVote: PropTypes.func.isRequired,
   title: PropTypes.string,
   options: PropTypes.array,
   _id: PropTypes.string
