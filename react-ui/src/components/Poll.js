@@ -28,15 +28,17 @@ class Poll extends Component {
   }
 
   componentDidMount() {
-    if (this.props.match.params.number) {
+    if (this.props.match) {
       this.getPoll(this.props.match.params.number);
     }
   }
   
 
   componentWillReceiveProps(nextProps) {
-    const pollId = nextProps.pollId;
-    this.getPoll(pollId);
+    if (nextProps.pollId) {
+      const pollId = nextProps.pollId;
+      this.getPoll(pollId);
+    }
   }
   
   render() {

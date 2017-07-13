@@ -39,12 +39,14 @@ const getPolls = (req, res) => {
 };
 
 const getPoll = (req, res) => {
-  Poll.findById(req.params.pollId, (err, poll) => {
-    if (err) {
-      res.status(500).send({error: err});
-    }
-    res.status(200).send({poll: poll});
-  });
+  if (req.params.pollId !== 'undefined') {
+    Poll.findById(req.params.pollId, (err, poll) => {
+      if (err) {
+        res.status(500).send({error: err});
+      }
+      res.status(200).send({poll: poll});
+    });
+  }
 };
 
 const vote = (req, res) => {
