@@ -27,8 +27,15 @@ class Poll extends Component {
     });
   }
 
+  componentDidMount() {
+    if (this.props.match.params.number) {
+      this.getPoll(this.props.match.params.number);
+    }
+  }
+  
+
   componentWillReceiveProps(nextProps) {
-    const pollId = nextProps.pollId || nextProps.match.params.number;
+    const pollId = nextProps.pollId;
     this.getPoll(pollId);
   }
   

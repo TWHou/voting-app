@@ -17,4 +17,9 @@ api.vote = (vote, pollId) => {
   .then((res) => res.data.poll);
 };
 
+api.newPoll = (poll, token) => {
+  return axios.post('/api/new', poll, {headers: {'Authorization': token}})
+  .then((res) => res.data.poll);
+};
+
 export default api;

@@ -1,51 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
-import axios from 'axios';
 
 import PollList from './PollList';
 import NewPoll from './NewPoll';
 import Poll from './Poll';
-
-const FAKEDATA = [
-  {
-    title: 'Favorite Color',
-    options: [
-      {
-        name: 'Blue',
-        votes: 3
-      },{
-        name: 'Green',
-        votes: 7
-      }
-    ],
-    user: 1
-  },{
-    title: 'Best Movie',
-    options: [
-      {
-        name: 'Casablanca',
-        votes: 5
-      },{
-        name: 'Schindler\'s List',
-        votes: 12
-      }
-    ],
-    user: 2
-  },{
-    title: 'Preferred Framework',
-    options: [
-      {
-        name: 'Angular',
-        votes: 6
-      },{
-        name: 'React',
-        votes: 6
-      }
-    ],
-    user: 3
-  }
-];
+import api from '../util/api';
 
 class Polls extends Component {
 
@@ -53,19 +13,12 @@ class Polls extends Component {
     polls: []
   }
 
-  getPolls = () => {
-    this.setState({
-      polls: FAKEDATA
-    });
-  }
-
   addPoll = (poll) => {
     const token = localStorage.getItem('token');
-    axios.post('/api/new', poll, {headers: {'Authorization': token}})
-    .then((res) => {
-      const result = res.data;
+    api.newPoll(poll, token)
+    .then((poll) => {
       this.setState((state) => ({
-        polls: state.polls.concat([ result.poll ])
+        polls: state.polls.concat([ poll ])
       }));
       this.props.history.push('/');
     })
@@ -75,7 +28,9 @@ class Polls extends Component {
   } 
 
   componentDidMount() {
-    this.getPolls();
+    api.getPolls().then((polls) => {
+      this.setState({polls: polls});
+    });
   }
 
   render() {
