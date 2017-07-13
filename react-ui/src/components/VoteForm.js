@@ -3,16 +3,29 @@ import PropTypes from 'prop-types';
 
 class VoteForm extends Component {
   state = {
-    selected: ''
+    selected: '',
+    input: ''
   }
 
   handleSelect = (event) => {
-    this.setState({selected: event.target.value});
+    this.setState({selected: event.target.value, input: ''});
+  }
+
+  handleNewOpt = (event) => {
+    this.setState({
+      selected: event.target.value,
+      input: event.target.value
+    });
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.onVote(this.state.selected);
+    if (this.state.input) {
+      this.props.onVote(this.state.selected, true);
+    } else {
+      this.props.onVote(this.state.selected);
+    }
+    this.setState({selected:'', input:''});
   }
 
   render() {
@@ -35,7 +48,23 @@ class VoteForm extends Component {
             </label>
           ))}
         </div>
+        <div className="form-group row">
+          <label htmlFor="new-option" className="col-4 col-form-label">
+            Add Your Own:
+          </label>
+          <div className="col-8">
+            <input
+              className="form-control"
+              type="text"
+              name="new-option"
+              id="new-option"
+              value={this.state.input}
+              onChange={this.handleNewOpt}
+            />
+          </div>
+        </div>
         <button className="btn btn-default" type="submit">Vote</button>
+        <p>state: {JSON.stringify(this.state)}</p>
       </form>
     );
   }

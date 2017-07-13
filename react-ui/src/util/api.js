@@ -12,8 +12,8 @@ api.getPoll = (pollId) => {
   .then((res) => res.data.poll);
 };
 
-api.vote = (vote, pollId) => {
-  return axios.post(`/api/vote/${pollId}`, {vote: vote})
+api.vote = (vote, pollId, newOpt) => {
+  return axios.post(`/api/vote/${pollId}`, {vote: vote, new: newOpt})
   .then((res) => res.data.poll);
 };
 

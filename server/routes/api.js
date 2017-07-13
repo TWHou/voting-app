@@ -54,11 +54,15 @@ const vote = (req, res) => {
     if (err) {
       res.status(500).send({error: err});
     }
-    poll.options.forEach((option) => {
-      if (option.name === req.body.vote) {
-        option.votes++;
-      }
-    });
+    if (req.body.new) {
+      poll.options.push({name: req.body.vote, votes: 1});
+    } else {
+      poll.options.forEach((option) => {
+        if (option.name === req.body.vote) {
+          option.votes++;
+        }
+      });
+    }
     poll.save((err, poll) => {
       if (err) {
         res.status(500).send({error: err});

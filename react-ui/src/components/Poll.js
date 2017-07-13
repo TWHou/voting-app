@@ -20,8 +20,8 @@ class Poll extends Component {
     });
   }
 
-  handleVote = (vote) => {
-    api.vote(vote, this.state._id)
+  handleVote = (vote, newOpt=false) => {
+    api.vote(vote, this.state._id, newOpt)
     .then((poll) => {
       this.setState({ ...poll });
     });
@@ -52,9 +52,9 @@ class Poll extends Component {
     return (
       <div>
         <h2>{this.state.title}</h2>
-        <div className="row">
-          <VoteForm className="col" onVote={this.handleVote} options={options.labels} />
-          <div className="col">
+        <div className="row flex-nowrap justify-content-around align-items-center">
+          <VoteForm className="col-6" onVote={this.handleVote} options={options.labels} />
+          <div className="col-6">
             <Polar data={options} />
           </div>
         </div>
