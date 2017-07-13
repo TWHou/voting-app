@@ -30,12 +30,14 @@ const addPoll = (req, res) => {
 };
 
 const getPolls = (req, res) => {
-  Poll.find({}, (err, polls) => {
-    if (err) {
-      res.status(500).send({error: err});
-    }
-    res.status(200).send({polls: polls});
-  });
+  Poll.find({})
+    .sort('-createdAt')
+    .exec((err, polls) => {
+      if (err) {
+        res.status(500).send({error: err});
+      }
+      res.status(200).send({polls: polls});
+    });
 };
 
 const getPoll = (req, res) => {
