@@ -29,6 +29,18 @@ const addPoll = (req, res) => {
   });
 };
 
+const getUserPolls = (req, res) => {
+  const id = req.payload._id;
+  Poll.find({user: id})
+    .sort('-createdAt')
+    .exec((err, polls) => {
+      if (err) {
+        res.status(500).send({error: err});
+      }
+      res.status(200).send({polls: polls});
+    });
+};
+
 const getPolls = (req, res) => {
   Poll.find({})
     .sort('-createdAt')
@@ -75,6 +87,7 @@ const vote = (req, res) => {
 };
 
 router.get('/isloggedin', Verify.verifyUser, getUser);
+router.get('/user', Verify.verifyUser, getUserPolls);
 router.get('/polls', getPolls);
 router.get('/poll/:pollId', getPoll);
 router.post('/new', Verify.verifyUser, addPoll);

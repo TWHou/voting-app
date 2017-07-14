@@ -7,6 +7,11 @@ api.getPolls = () => {
   .then((res) => res.data.polls);
 };
 
+api.getUserPolls = (token) => {
+  return axios.get('/api/user', {headers: {'Authorization': token}})
+  .then((res) => res.data.polls);
+};
+
 api.getPoll = (pollId) => {
   return axios.get(`/api/poll/${pollId}`)
   .then((res) => res.data.poll);
