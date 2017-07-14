@@ -13,7 +13,7 @@ const signup = function(req, res){
     req.body.password,
     function(err, user){
       if (err) {
-        return res.status(400).send({error: err});
+        return res.status(err.status || 400).send({error: err});
       }
       passport.authenticate('local')(req, res, function(){
         const token = Verify.getToken({
@@ -40,7 +40,7 @@ const login = function(req, res, next){
     }
     req.logIn(user, function(err){
       if (err) {
-        return res.status(500).json({error: err});
+        return res.status(err.status || 500).json({error: err});
       }
       const token = Verify.getToken({
         'username': user.username,

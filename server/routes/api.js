@@ -23,7 +23,7 @@ const addPoll = (req, res) => {
   });
   newPoll.save((err, poll)=>{
     if (err) {
-      res.status(500).send({error: err});
+      res.status(err.status || 500).send({error: err});
     }
     res.status(200).send({message: 'New Poll Created!', poll: poll});
   });
@@ -35,7 +35,7 @@ const getUserPolls = (req, res) => {
     .sort('-createdAt')
     .exec((err, polls) => {
       if (err) {
-        res.status(500).send({error: err});
+        res.status(err.status || 500).send({error: err});
       }
       res.status(200).send({polls: polls});
     });
@@ -46,7 +46,7 @@ const getPolls = (req, res) => {
     .sort('-createdAt')
     .exec((err, polls) => {
       if (err) {
-        res.status(500).send({error: err});
+        res.status(err.status || 500).send({error: err});
       }
       res.status(200).send({polls: polls});
     });
@@ -56,7 +56,7 @@ const getPoll = (req, res) => {
   if (req.params.pollId !== 'undefined') {
     Poll.findById(req.params.pollId, (err, poll) => {
       if (err) {
-        res.status(500).send({error: err});
+        res.status(err.status || 500).send({error: err});
       }
       res.status(200).send({poll: poll});
     });
@@ -66,7 +66,7 @@ const getPoll = (req, res) => {
 const vote = (req, res) => {
   Poll.findById(req.params.pollId, (err, poll) => {
     if (err) {
-      res.status(500).send({error: err});
+      res.status(err.status || 500).send({error: err});
     }
     if (req.body.new) {
       poll.options.push({name: req.body.vote, votes: 1});
@@ -79,7 +79,7 @@ const vote = (req, res) => {
     }
     poll.save((err, poll) => {
       if (err) {
-        res.status(500).send({error: err});
+        res.status(err.status || 500).send({error: err});
       }
       res.status(200).send({poll: poll});
     });
