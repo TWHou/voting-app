@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import PropTypes from 'prop-types';
 
 import PollList from './PollList';
 import api from '../util/api';
@@ -17,17 +16,12 @@ class User extends Component {
       this.setState({polls: polls});
     });
   }
-  
 
   render() {
     return (
-      <PollList polls={this.state.polls} loggedIn/>
+      <PollList polls={this.state.polls}/>
     );
   }
 }
-
-User.propTypes = {
-
-};
 
 export default User;

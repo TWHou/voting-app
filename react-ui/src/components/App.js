@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import axios from 'axios';
 
+import auth from '../util/auth';
 import Header from './Header.js';
 import Home from './Home';
 import Polls from './Polls';
@@ -16,72 +16,66 @@ class App extends Component {
     usererr: false
   }
 
-  doRegister = user => {
-    axios.post('/auth/signup', user)
-    .then(res => {
-      const result = res.data;
-      if (result.token) {
-        localStorage.setItem('token', result.token);
-        this.setState({username: user.username});
+  doRegister = (user) => {
+    auth.register(user)
+    .then((res) => {
+      if (res.token) {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('id', res.user.id);
+        this.setState({username: res.user.username});
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
     });
   }
 
-  doLogin = user => {
-    console.info('logging in.....');
-    axios.post('auth/login', user)
-    .then(res => {
-      const result = res.data;
-      console.info(result);
-      if (result.token) {
-        localStorage.setItem('token', result.token);
-        this.setState({username: user.username});
+  doLogin = (user) => {
+    auth.login(user)
+    .then((res) => {
+      console.log(res);
+      if (res.token) {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('id', res.user.id);
+        this.setState({username: res.user.username});
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
     });
   }
 
   doLogout = () => {
     const token = localStorage.getItem('token');
-    axios.get('auth/logout', {headers: {'Authorization': token}})
-    .then(res => {
-      console.info(res);
-      if (res.status === '200') {
+    auth.logout(token)
+    .then((res) => {
+      if (res.status==='200') {
         localStorage.removeItem('token');
+        localStorage.removeItem('id');
         this.setState({username: ''});
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
     });
   }
 
-  getUser = (token) => {
-    axios.get('api/isloggedin', {headers: {'Authorization': token}})
-    .then(res => {
-      console.info(res);
-      const user = res.data;
-      if (user) {
-        this.setState({
-          username: user.username
-        });
-      }
-    })
-    .catch(() => {
-      localStorage.removeItem('token');
-      this.setState({username: ''});
-    });
-  };
-
   componentDidMount() {
     const token = localStorage.getItem('token');
     if (token) {
-      this.getUser(token);
+      auth.getUser(token)
+      .then((user) => {
+        if (user) {
+          this.setState({
+            username: user.username
+          });
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        this.setState({username: ''});
+      });
     }
   }
   

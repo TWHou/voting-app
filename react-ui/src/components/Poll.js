@@ -33,7 +33,6 @@ class Poll extends Component {
     }
   }
   
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.pollId) {
       const pollId = nextProps.pollId;

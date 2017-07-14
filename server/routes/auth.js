@@ -49,6 +49,7 @@ const login = function(req, res, next){
       res.status(200).json({
         status: 'Log in successful.',
         success: true,
+        user: {username: user.username, id: user.id},
         token: token
       });
     });
