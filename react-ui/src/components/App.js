@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route/* , Redirect */, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import auth from '../util/auth';
 import Header from './Header.js';
@@ -23,6 +24,7 @@ class App extends Component {
         localStorage.setItem('token', res.token);
         localStorage.setItem('id', res.user.id);
         this.setState({username: res.user.username});
+        this.props.history.push('/');
       }
     })
     .catch((err) => {
@@ -37,6 +39,7 @@ class App extends Component {
         localStorage.setItem('token', res.token);
         localStorage.setItem('id', res.user.id);
         this.setState({username: res.user.username});
+        this.props.history.push('/');
       }
     })
     .catch((err) => {
@@ -48,10 +51,12 @@ class App extends Component {
     const token = localStorage.getItem('token');
     auth.logout(token)
     .then((res) => {
-      if (res.status==='200') {
+      console.log(res);
+      if (res.status===200) {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         this.setState({username: ''});
+        this.props.history.push('/');
       }
     })
     .catch((err) => {
@@ -84,34 +89,30 @@ class App extends Component {
         <Header username={this.state.username} />
         <main>
           <Route exact path='/' component={Home}/>
-          <Route path='/polls' render={({ history }) => <Polls history={history} />}/>
+          <Route path='/polls' render={({ history }) => (
+            <Polls history={history} />
+          )}/>
           <Route path='/user' component={User}/>
           <Route path='/login' render={() => (
-            this.state.username ? (<Redirect to="/" />) : ( 
-              <Login onLogin={this.doLogin} /> 
-            ))}/>
-          <Route path='/logout' 
-            render={({ history }) => (
-              this.state.username ? (
-                <Logout onLogout={this.doLogout} history={history} />
-              ) : (<Redirect to="/" />)
-            )}
-          />
-          <Route
-            path='/register'
-            render={() => (
-              this.state.username ? (<Redirect to="/" />) : (
-                <Register 
-                  onRegister={this.doRegister}
-                  usererr={this.state.usererr} 
-                />
-              )
-            )}
-          />
+            <Login onLogin={this.doLogin} /> 
+          )}/>
+          <Route path='/logout' render={({ history }) => (
+              <Logout onLogout={this.doLogout} history={history} />
+          )}/>
+          <Route path='/register' render={() => (
+            <Register 
+              onRegister={this.doRegister}
+              usererr={this.state.usererr} 
+            />
+          )}/>
         </main>
       </div>
     );
   }
 }
 
-export default App;
+App.propTypes = {
+  history: PropTypes.object
+};
+
+export default withRouter(App);

@@ -13,7 +13,7 @@ class Logout extends Component {
       <form onSubmit={this.handleSubmit}>
         <h3>Are you sure you want to log out?</h3>
         <input type="submit" value="Logout" />
-        <button onClick={this.props.history.goBack()}>Cancel</button>
+         <button onClick={this.props.history.goBack}>Cancel</button> 
       </form>
     );
   }
