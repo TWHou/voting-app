@@ -6,8 +6,9 @@ class Login extends Component {
   
   handleSubmit = event => {
     event.preventDefault();
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
     const values = serializeForm(event.target, {hash: true});
-    this.props.onLogin(values);
+    this.props.onLogin(values, from);
   }
 
   render() {
@@ -28,7 +29,8 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  onLogin: PropTypes.func.isRequired
+  onLogin: PropTypes.func.isRequired,
+  location: PropTypes.object
 };
 
 export default Login;

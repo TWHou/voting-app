@@ -3,9 +3,12 @@ import { Route/* , Redirect */, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import auth from '../util/auth';
+import api from '../util/api';
+import AuthRoute from '../util/AuthRoute';
 import Header from './Header.js';
 import Home from './Home';
 import Polls from './Polls';
+import NewPoll from './NewPoll';
 import User from './User';
 import Login from './Login';
 import Logout from './Logout';
@@ -32,14 +35,14 @@ class App extends Component {
     });
   }
 
-  doLogin = (user) => {
+  doLogin = (user, from) => {
     auth.login(user)
     .then((res) => {
       if (res.token) {
         localStorage.setItem('token', res.token);
         localStorage.setItem('id', res.user.id);
         this.setState({username: res.user.username});
-        this.props.history.push('/');
+        this.props.history.push(from);
       }
     })
     .catch((err) => {
@@ -51,7 +54,6 @@ class App extends Component {
     const token = localStorage.getItem('token');
     auth.logout(token)
     .then((res) => {
-      console.log(res);
       if (res.status===200) {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
@@ -63,6 +65,20 @@ class App extends Component {
       console.error(err);
     });
   }
+
+  addPoll = (poll) => {
+    const token = localStorage.getItem('token');
+    api.newPoll(poll, token)
+    .then((poll) => {
+      this.setState((state) => ({
+        polls: state.polls.concat([ poll ])
+      }));
+      this.props.history.push('/');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  } 
 
   componentDidMount() {
     const token = localStorage.getItem('token');
@@ -92,9 +108,10 @@ class App extends Component {
           <Route path='/polls' render={({ history }) => (
             <Polls history={history} />
           )}/>
-          <Route path='/user' component={User}/>
-          <Route path='/login' render={() => (
-            <Login onLogin={this.doLogin} /> 
+          <AuthRoute path='/newpoll' component={NewPoll} onSubmit={this.addPoll}/>
+          <AuthRoute path='/user' component={User}/>
+          <Route path='/login' render={({ location }) => (
+            <Login location={location} onLogin={this.doLogin} /> 
           )}/>
           <Route path='/logout' render={({ history }) => (
               <Logout onLogout={this.doLogout} history={history} />

@@ -11,7 +11,7 @@ class UserMenu extends Component {
             <NavLink activeClassName='active' to='/user' className="nav-link p-2">My Polls</NavLink>
           </li>
           <li className="nav-item">
-            <NavLink activeClassName='active' to='/polls/new' className="nav-link p-2">New Poll</NavLink>
+            <NavLink activeClassName='active' to='/newpoll' className="nav-link p-2">New Poll</NavLink>
           </li>
         </ul>
         <span>Welcome back, {this.props.username}!</span>
