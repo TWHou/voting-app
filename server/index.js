@@ -39,7 +39,11 @@ app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 app.use('/api', apiRouter);
 app.use('/auth', authRouter);
 
-app.use(app.router);
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', function(request, response) {
+  response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
+});
+
 app.use(function(err, req, res, next) {
   if(!err) return next();
   res.status(err.status || 500);
@@ -47,11 +51,6 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: err
   });
-});
-
-// All remaining requests return the React app, so it can handle routing.
-app.get('*', function(request, response) {
-  response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
 });
 
 app.listen(PORT, function () {

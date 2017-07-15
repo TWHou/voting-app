@@ -4,17 +4,17 @@ const Verify = require('./verify');
 const Poll = require('../models/Poll');
 const User = require('../models/User');
 
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   const id = req.payload._id;
   User.findById(id, (err, user) => {
     if (err) {
-      res.status(err.status).send({error: err});
+      return next(err);
     }
     res.send(user);
   });
 };
 
-const addPoll = (req, res) => {
+const addPoll = (req, res, next) => {
   const id = req.payload._id;
   let newPoll = new Poll({
     title: req.body.title,
@@ -23,50 +23,50 @@ const addPoll = (req, res) => {
   });
   newPoll.save((err, poll)=>{
     if (err) {
-      res.status(err.status || 500).send({error: err});
+      return next(err);
     }
     res.status(200).send({message: 'New Poll Created!', poll: poll});
   });
 };
 
-const getUserPolls = (req, res) => {
+const getUserPolls = (req, res, next) => {
   const id = req.payload._id;
   Poll.find({user: id})
     .sort('-createdAt')
     .exec((err, polls) => {
       if (err) {
-        res.status(err.status || 500).send({error: err});
+        return next(err);
       }
       res.status(200).send({polls: polls});
     });
 };
 
-const getPolls = (req, res) => {
+const getPolls = (req, res, next) => {
   Poll.find({})
     .sort('-createdAt')
     .exec((err, polls) => {
       if (err) {
-        res.status(err.status || 500).send({error: err});
+        return next(err);
       }
       res.status(200).send({polls: polls});
     });
 };
 
-const getPoll = (req, res) => {
+const getPoll = (req, res, next) => {
   if (req.params.pollId !== 'undefined') {
     Poll.findById(req.params.pollId, (err, poll) => {
       if (err) {
-        res.status(err.status || 500).send({error: err});
+        return next(err);
       }
       res.status(200).send({poll: poll});
     });
   }
 };
 
-const vote = (req, res) => {
+const vote = (req, res, next) => {
   Poll.findById(req.params.pollId, (err, poll) => {
     if (err) {
-      res.status(err.status || 500).send({error: err});
+      return next(err);
     }
     if (req.body.new) {
       poll.options.push({name: req.body.vote, votes: 1});
@@ -79,10 +79,19 @@ const vote = (req, res) => {
     }
     poll.save((err, poll) => {
       if (err) {
-        res.status(err.status || 500).send({error: err});
+        return next(err);
       }
       res.status(200).send({poll: poll});
     });
+  });
+};
+
+const deletePoll = (req, res, next) => {
+  Poll.findByIdAndRemove(req.params.pollId, (err, result) => {
+    if (err) {
+      return next(err);
+    }
+    res.json(result);
   });
 };
 
@@ -92,5 +101,6 @@ router.get('/polls', getPolls);
 router.get('/poll/:pollId', getPoll);
 router.post('/new', Verify.verifyUser, addPoll);
 router.post('/vote/:pollId', vote);
+router.delete('/delete/:pollId', Verify.verifyUser, deletePoll);
 
 module.exports = router;

@@ -11,12 +11,18 @@ class Poll extends Component {
     _id: '',
     title: '',
     options: [],
-    user: ''
+    user: '',
+    owner: false,
+    confDel: false
   }
 
   getPoll = (pollId) => {
     api.getPoll(pollId).then((poll) => {
       this.setState({ ...poll });
+      const userId = localStorage.getItem('id');
+      if (this.state.user === userId) {
+        this.setState({owner: true});
+      }
     });
   }
 
@@ -25,6 +31,23 @@ class Poll extends Component {
     .then((poll) => {
       this.setState({ ...poll });
     });
+  }
+
+  handleDelete = () => {
+    const token = localStorage.getItem('token');
+    api.delete(this.state._id, token)
+    .then((res) => {
+      this.props.history.push('/user');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }
+
+  toggleDel = () => {
+    this.setState((state) => ({
+      confDel: !state.confDel
+    }));
   }
 
   componentDidMount() {
@@ -49,14 +72,36 @@ class Poll extends Component {
       return obj;
     }, {labels:[],datasets:[{data:[], backgroundColor:[]}]});
     return (
-      <div>
+      <div className="d-flex flex-column justify-content-between">
         <h2>{this.state.title}</h2>
         <div className="row flex-nowrap justify-content-around align-items-center">
-          <VoteForm className="col-6" onVote={this.handleVote} options={options.labels} />
-          <div className="col-6">
+          <VoteForm className="col-4" onVote={this.handleVote} options={options.labels} />
+          <div className="col-8">
             <Polar data={options} />
           </div>
         </div>
+        {this.state.owner && (this.state.confDel ? (
+            <div className="bg-warning text-white p-3 text-center rounded">
+              <h4>Are you sure? This cannot be undone!</h4>
+              <button
+                type="button"
+                className="btn btn-danger btn-block"
+                onClick={this.handleDelete}
+              >Yes, delete this poll!</button>
+              <button
+                type="button"
+                className="btn btn-block"
+                onClick={this.toggleDel}
+              >No! Please don't take my poll away.</button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-danger btn-block"
+              onClick={this.toggleDel}
+            >Delete</button>
+          ) 
+        )}
       </div>
     );
   }
@@ -64,7 +109,8 @@ class Poll extends Component {
 
 Poll.propTypes = {
   match: PropTypes.object,
-  pollId: PropTypes.string
+  pollId: PropTypes.string,
+  history: PropTypes.object
 };
 
 export default Poll;

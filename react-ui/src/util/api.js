@@ -27,4 +27,9 @@ api.newPoll = (poll, token) => {
   .then((res) => res.data.poll);
 };
 
+api.delete = (pollId, token) => {
+  return axios.delete(`/api/delete/${pollId}`, {headers: {'Authorization': token}})
+  .then((res) => res);
+};
+
 export default api;

@@ -33,7 +33,6 @@ class App extends Component {
   doLogin = (user) => {
     auth.login(user)
     .then((res) => {
-      console.log(res);
       if (res.token) {
         localStorage.setItem('token', res.token);
         localStorage.setItem('id', res.user.id);
@@ -71,7 +70,7 @@ class App extends Component {
           });
         }
       })
-      .catch(() => {
+      .catch((err) => {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         this.setState({username: ''});
