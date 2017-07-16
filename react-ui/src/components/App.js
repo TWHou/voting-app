@@ -20,6 +20,7 @@ class App extends Component {
     username: '',
     regErr: {},
     loginErr: '',
+    pollErr: '',
     polls: []
   }
 
@@ -37,7 +38,7 @@ class App extends Component {
       }
     })
     .catch((err) => {
-      console.error({error: err});
+      console.error(err);
       const error = err.response.data.error;
       if (error.name === 'UserExistsError' || error.message === 'User validation failed: username: Error, expected username to be unique.') {
         this.setState({regErr: {username: 'Sorry, that username is taken. Try another?'}});
@@ -91,6 +92,10 @@ class App extends Component {
     })
     .catch((err) => {
       console.error(err);
+      const msg = err.response.data.message;
+      if (msg === 'Poll validation failed: title: Error, expected title to be unique.') {
+        this.setState({pollErr: 'This poll already exist, you can add your options to it.'});
+      }
     });
   } 
 
@@ -128,7 +133,7 @@ class App extends Component {
             <PollList polls={this.state.polls} />
           )}/>
           <Route path='/poll/:number' component={Poll}/>
-          <AuthRoute path='/newpoll' component={NewPoll} onSubmit={this.addPoll}/>
+          <AuthRoute path='/newpoll' component={NewPoll} onSubmit={this.addPoll} pollErr={this.state.pollErr} />
           <AuthRoute path='/user' component={User}/>
           <Route path='/login' render={({ location }) => (
             <Login

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 class NewPoll extends Component {
   state = {
     title: '',
-    options: [{name: ''}, {name: ''}]
+    options: [{name: ''}, {name: ''}],
+    err: {}
   }
 
   updateTitle = e => {
@@ -25,20 +26,35 @@ class NewPoll extends Component {
 
   removeOpt = () => {
     let newOpt = this.state.options;
-    newOpt.pop();
+    if (newOpt.length > 2) {
+      newOpt.pop();
+    }
     this.setState({options: newOpt});
   }
 
   handleSubmit = e => {
     e.preventDefault();
+    this.setState({err: {}});
     const title = this.state.title;
-    const options = this.state.options;
-    this.props.onSubmit({title, options});
+    const options = this.state.options
+    .map((option) => ({name: option.name.trim()}))
+    .filter((option) => option.name);
+    if (!title) {
+      this.setState({err: {title: 'Title is required.'}});
+    }
+    if (options.length < 2) {
+      this.setState({err: {options: 'Need at least 2 options'}});
+    }
+    if (this.state.err !== {}) {
+      this.props.onSubmit({title, options});
+    }
   }
 
   render() {
+    const titleErr = this.state.err.title || this.props.pollErr;
+    const optClass = this.state.err.options ? 'form-group has-danger' : 'form-group';
     const options = this.state.options.map((option, i) => (
-      <div className="form-group" key={i}>
+      <div className={optClass} key={i}>
         <label htmlFor={'option' + (i+1)}>Option {i+1}</label>
         <input
           type="text"
@@ -53,7 +69,7 @@ class NewPoll extends Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
+          <div className={titleErr ? 'form-group has-danger' : 'form-group'}>
             <label htmlFor="title">Title</label>
             <input 
               type="text"
@@ -62,9 +78,17 @@ class NewPoll extends Component {
               name="title"
               value={this.state.title}
               onChange={this.updateTitle}
-              placeholder="Title for Your Poll" />
+              placeholder="Title for Your Poll"
+            />
+            {titleErr && (
+              <div className="form-control-feedback">
+                {this.state.err.title}
+                {this.props.pollErr}
+              </div>
+            )}
           </div>
           {options}
+          <p className="text-danger">{this.state.err.options}</p>
           <input type="submit" value="Add Poll" />
         </form>
         <button onClick={this.addOpt}>Add Option</button>
@@ -75,7 +99,8 @@ class NewPoll extends Component {
 }
 
 NewPoll.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  pollErr: PropTypes.string
 };
 
 export default NewPoll;
