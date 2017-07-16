@@ -69,7 +69,6 @@ class NewPoll extends Component {
         </form>
         <button onClick={this.addOpt}>Add Option</button>
         <button onClick={this.removeOpt}>Remove Option</button>
-        <p>State: {JSON.stringify(this.state)}</p>
       </div>
     );
   }

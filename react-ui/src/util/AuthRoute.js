@@ -24,7 +24,8 @@ class AuthRoute extends Component {
 }
 
 AuthRoute.propTypes = {
-  component: PropTypes.func
+  component: PropTypes.func,
+  path: PropTypes.string
 };
 
 export default AuthRoute;

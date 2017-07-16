@@ -64,7 +64,6 @@ class VoteForm extends Component {
           </div>
         </div>
         <button className="btn btn-default" type="submit">Vote</button>
-        <p>state: {JSON.stringify(this.state)}</p>
       </form>
     );
   }

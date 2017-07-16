@@ -59,13 +59,6 @@ class Poll extends Component {
     }
   }
   
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.pollId) {
-  //     const pollId = nextProps.pollId;
-  //     this.getPoll(pollId);
-  //   }
-  // }
-  
   render() {
     const randColor = () => '#'+Math.floor(Math.random()*16777215).toString(16);
     const options = this.state.options.reduce((obj, item) => {
