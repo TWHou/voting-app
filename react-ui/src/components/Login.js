@@ -14,11 +14,12 @@ class Login extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className="form-group">
+        <p className="text-danger">{this.props.loginErr}</p>
+        <div className={this.props.loginErr ? 'form-group has-danger' : 'form-group'}>
           <label htmlFor="username">Username:</label>
           <input type="text" className="form-control" id="username" name="username" placeholder="Username" />
         </div>
-        <div className="form-group">
+        <div className={this.props.loginErr ? 'form-group has-danger' : 'form-group'}>
           <label htmlFor="password">Password:</label>
           <input type="password" className="form-control" id="password" name="password" placeholder="Password" />
         </div>
@@ -30,7 +31,8 @@ class Login extends Component {
 
 Login.propTypes = {
   onLogin: PropTypes.func.isRequired,
-  location: PropTypes.object
+  location: PropTypes.object,
+  loginErr: PropTypes.string
 };
 
 export default Login;

@@ -19,6 +19,7 @@ class App extends Component {
   state = {
     username: '',
     regErr: {},
+    loginErr: '',
     polls: []
   }
 
@@ -36,6 +37,7 @@ class App extends Component {
       }
     })
     .catch((err) => {
+      console.error(err);
       const error = err.response.data.error;
       if (error.name === 'UserExistsError') {
         this.setState({regErr: {username: error.message}});
@@ -55,6 +57,10 @@ class App extends Component {
     })
     .catch((err) => {
       console.error(err);
+      const msg = err.response.data.message;
+      if (msg === 'Password or username are incorrect') {
+        this.setState({loginErr: msg});
+      }
     });
   }
 
@@ -125,7 +131,11 @@ class App extends Component {
           <AuthRoute path='/newpoll' component={NewPoll} onSubmit={this.addPoll}/>
           <AuthRoute path='/user' component={User}/>
           <Route path='/login' render={({ location }) => (
-            <Login location={location} onLogin={this.doLogin} /> 
+            <Login
+              location={location}
+              onLogin={this.doLogin}
+              loginErr={this.state.loginErr}
+            /> 
           )}/>
           <Route path='/logout' render={({ history }) => (
               <Logout onLogout={this.doLogout} history={history} />
