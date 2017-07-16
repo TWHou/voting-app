@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 class VoteForm extends Component {
   state = {
     selected: '',
-    input: ''
+    input: '',
   }
 
   handleSelect = (event) => {
@@ -31,7 +31,7 @@ class VoteForm extends Component {
   render() {
     return (
       <form className="d-flex flex-column align-items-center" onSubmit={this.handleSubmit}>
-        <div className="d-flex flex-wrap justify-content-around" data-toggle="buttons">
+        <div className="d-flex flex-wrap justify-content-between" data-toggle="buttons">
           {this.props.options.map((option) => (
             <label 
               className={this.state.selected === option ? 'm-2 btn btn-secondary active' : 'm-2 btn btn-secondary'}
@@ -48,21 +48,23 @@ class VoteForm extends Component {
             </label>
           ))}
         </div>
-        <div className="form-group row">
-          <label htmlFor="new-option" className="col-4 col-form-label">
-            Add Your Own:
-          </label>
-          <div className="col-8">
-            <input
-              className="form-control"
-              type="text"
-              name="new-option"
-              id="new-option"
-              value={this.state.input}
-              onChange={this.handleNewOpt}
-            />
+        {localStorage.getItem('token') && (
+          <div className="form-group row align-items-center">
+            <label htmlFor="new-option" className="col-4 col-form-label">
+              Add Your Own:
+            </label>
+            <div className="col-8">
+              <input
+                className="form-control"
+                type="text"
+                name="new-option"
+                id="new-option"
+                value={this.state.input}
+                onChange={this.handleNewOpt}
+              />
+            </div>
           </div>
-        </div>
+        )}
         <button className="btn btn-default" type="submit">Vote</button>
       </form>
     );
@@ -71,7 +73,7 @@ class VoteForm extends Component {
 
 VoteForm.propTypes = {
   options: PropTypes.array.isRequired,
-  onVote: PropTypes.func.isRequired
+  onVote: PropTypes.func.isRequired,
 };
 
 export default VoteForm;
