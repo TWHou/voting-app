@@ -18,7 +18,7 @@ import Register from './Register';
 class App extends Component {
   state = {
     username: '',
-    usererr: false,
+    regErr: {},
     polls: []
   }
 
@@ -31,9 +31,15 @@ class App extends Component {
         this.setState({username: res.user.username});
         this.props.history.push('/');
       }
+      if (res.error) {
+        this.setState({regErr: res.error});
+      }
     })
     .catch((err) => {
-      console.error(err);
+      const error = err.response.data.error;
+      if (error.name === 'UserExistsError') {
+        this.setState({regErr: {username: error.message}});
+      }
     });
   }
 
@@ -127,7 +133,7 @@ class App extends Component {
           <Route path='/register' render={() => (
             <Register 
               onRegister={this.doRegister}
-              usererr={this.state.usererr} 
+              regErr={this.state.regErr} 
             />
           )}/>
         </main>

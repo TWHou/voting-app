@@ -4,16 +4,23 @@ const passport = require('passport');
 const User = require('../models/User');
 const Verify = require('./verify');
 
-const signup = function(req, res){
+const signup = function(req, res, next){
   if (req.body.username.length < 3) {
-    return res.json({error: 'username must be at least 3 characters'});
+    return res.json({
+      error: {username: 'username must be at least 3 characters.'}
+    });
+  }
+  if (req.body.password.length < 8) {
+    return res.json({
+      error: {password: 'password must be at least 8 characters'}
+    });
   }
   User.register(
     new User({username: req.body.username}),
     req.body.password,
     function(err, user){
       if (err) {
-        return res.status(err.status || 400).send({error: err});
+        return next(err);
       }
       passport.authenticate('local')(req, res, function(){
         const token = Verify.getToken({

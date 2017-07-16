@@ -25,18 +25,23 @@ class Register extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className={this.props.usererr ? 'form-group has-danger' : 'form-group'}>
+        <div className={this.props.regErr.username ? 'form-group has-danger' : 'form-group'}>
           <label htmlFor="username">Username:</label>
           <input type="text" className="form-control" id="username" name="username" placeholder="Username" />
-          {this.props.usererr && (
+          {this.props.regErr.username && (
             <div className="form-control-feedback">
-              Sorry, that username's taken. Try another?
+              {this.props.regErr.username}
             </div>
           )}
         </div>
-        <div className="form-group">
+        <div className={this.props.regErr.password ? 'form-group has-danger' : 'form-group'}>
           <label htmlFor="password">Password:</label>
           <input type="password" className="form-control" id="password" name="password" placeholder="Password" />
+          {this.props.regErr.password && (
+            <div className="form-control-feedback">
+              {this.props.regErr.password}
+            </div>
+          )}
         </div>
         <div className={this.state.passerr ? 'form-group has-danger' : 'form-group'}>
           <label htmlFor="passconf">Retype Password:</label>
@@ -55,7 +60,7 @@ class Register extends Component {
 
 Register.propTypes = {
   onRegister: PropTypes.func.isRequired,
-  usererr: PropTypes.bool
+  regErr: PropTypes.object
 };
 
 export default Register;
