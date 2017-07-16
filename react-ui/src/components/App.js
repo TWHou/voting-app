@@ -7,7 +7,8 @@ import api from '../util/api';
 import AuthRoute from '../util/AuthRoute';
 import Header from './Header.js';
 import Home from './Home';
-import Polls from './Polls';
+import PollList from './PollList';
+import Poll from './Poll';
 import NewPoll from './NewPoll';
 import User from './User';
 import Login from './Login';
@@ -17,7 +18,8 @@ import Register from './Register';
 class App extends Component {
   state = {
     username: '',
-    usererr: false
+    usererr: false,
+    polls: []
   }
 
   doRegister = (user) => {
@@ -73,7 +75,7 @@ class App extends Component {
       this.setState((state) => ({
         polls: state.polls.concat([ poll ])
       }));
-      this.props.history.push('/');
+      this.props.history.push('/user');
     })
     .catch((err) => {
       console.error(err);
@@ -97,6 +99,9 @@ class App extends Component {
         this.setState({username: ''});
       });
     }
+    api.getPolls().then((polls) => {
+      this.setState({polls: polls});
+    });
   }
   
   render() {
@@ -104,10 +109,13 @@ class App extends Component {
       <div className="container">
         <Header username={this.state.username} />
         <main>
-          <Route exact path='/' component={Home}/>
-          <Route path='/polls' render={({ history }) => (
-            <Polls history={history} />
+          <Route exact path='/' render={() => (
+            <Home polls={this.state.polls} />
           )}/>
+          <Route path='/polls' render={() => (
+            <PollList polls={this.state.polls} />
+          )}/>
+          <Route path='/poll/:number' component={Poll}/>
           <AuthRoute path='/newpoll' component={NewPoll} onSubmit={this.addPoll}/>
           <AuthRoute path='/user' component={User}/>
           <Route path='/login' render={({ location }) => (

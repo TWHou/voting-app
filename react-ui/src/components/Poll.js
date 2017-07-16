@@ -54,14 +54,17 @@ class Poll extends Component {
     if (this.props.match) {
       this.getPoll(this.props.match.params.number);
     }
-  }
-  
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.pollId) {
-      const pollId = nextProps.pollId;
-      this.getPoll(pollId);
+    if (this.props.pollId) {
+      this.getPoll(this.props.pollId);
     }
   }
+  
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.pollId) {
+  //     const pollId = nextProps.pollId;
+  //     this.getPoll(pollId);
+  //   }
+  // }
   
   render() {
     const randColor = () => '#'+Math.floor(Math.random()*16777215).toString(16);

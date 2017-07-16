@@ -9,7 +9,7 @@ class PollList extends Component {
         {this.props.polls.map(poll =>
           <Link
             key={poll._id}
-            to={`/polls/${poll._id}`}
+            to={`/poll/${poll._id}`}
             className="list-group-item list-group-item-action"
           >
             {poll.title}

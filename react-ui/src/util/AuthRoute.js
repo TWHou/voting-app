@@ -7,11 +7,11 @@ class AuthRoute extends Component {
   isAuthed = () => localStorage.getItem('token') ? true : false
 
   render() {
-    const {component: Component, ...rest} = this.props;
+    const {component: Component, path, ...rest} = this.props;
     return (
-      <Route {...rest} render={props => (
+      <Route path={path} render={(props) => (
         this.isAuthed() ? ( 
-          <Component {...props}/>
+          <Component {...rest}/>
         ) : (
           <Redirect to={{
             pathname: '/login', 
