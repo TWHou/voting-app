@@ -37,10 +37,10 @@ class App extends Component {
       }
     })
     .catch((err) => {
-      console.error(err);
+      console.error({error: err});
       const error = err.response.data.error;
-      if (error.name === 'UserExistsError') {
-        this.setState({regErr: {username: error.message}});
+      if (error.name === 'UserExistsError' || error.message === 'User validation failed: username: Error, expected username to be unique.') {
+        this.setState({regErr: {username: 'Sorry, that username is taken. Try another?'}});
       }
     });
   }

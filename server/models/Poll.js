@@ -1,11 +1,14 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const uniqueValidator = require('mongoose-unique-validator');
 
-var pollSchema = new Schema({
+
+const pollSchema = new Schema({
   title: { 
     type: String,
     required: true,
-    unique: true 
+    unique: true,
+    uniqueCaseInsensitive: true
   },
   options: [{
     name: { type: String, required: true},
@@ -20,6 +23,8 @@ var pollSchema = new Schema({
   timestamps: true
 });
 
-var Poll = mongoose.model('Poll', pollSchema);
+pollSchema.plugin(uniqueValidator, { message: 'Error, expected {PATH} to be unique.' });
+
+const Poll = mongoose.model('Poll', pollSchema);
 
 module.exports = Poll;
