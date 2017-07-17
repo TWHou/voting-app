@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class UserMenu extends Component {
   render() {
     return (
-      <div className="d-inline-flex align-items-baseline">
+      <div className="d-sm-inline-flex align-items-baseline">
         <ul className="navbar-nav flex-row align-items-baseline">
           <li className="nav-item">
             <NavLink activeClassName='active' to='/user' className="nav-link p-2">My Polls</NavLink>
