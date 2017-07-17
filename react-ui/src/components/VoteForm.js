@@ -20,11 +20,7 @@ class VoteForm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    if (this.state.input) {
-      this.props.onVote(this.state.selected, true);
-    } else {
-      this.props.onVote(this.state.selected);
-    }
+    this.props.onVote(this.state.selected);
     this.setState({selected:'', input:''});
   }
 

@@ -26,8 +26,8 @@ class Poll extends Component {
     });
   }
 
-  handleVote = (vote, newOpt=false) => {
-    api.vote(vote, this.state._id, newOpt)
+  handleVote = (vote) => {
+    api.vote(vote, this.state._id)
     .then((poll) => {
       this.setState({ ...poll });
     });

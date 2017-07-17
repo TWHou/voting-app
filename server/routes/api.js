@@ -63,19 +63,22 @@ const getPoll = (req, res, next) => {
   }
 };
 
+const textPrep = (text) => {
+  return text.replace(/\W/g, '').toLowerCase();
+};
+
 const vote = (req, res, next) => {
   Poll.findById(req.params.pollId, (err, poll) => {
     if (err) {
       return next(err);
     }
-    if (req.body.new) {
-      poll.options.push({name: req.body.vote, votes: 1});
+    const index = poll.options.findIndex(
+      (option) => textPrep(option.name) === textPrep(req.body.vote)
+    );
+    if (index > -1) {
+      poll.options[index].votes++;
     } else {
-      poll.options.forEach((option) => {
-        if (option.name === req.body.vote) {
-          option.votes++;
-        }
-      });
+      poll.options.push({name: req.body.vote, votes: 1});
     }
     poll.save((err, poll) => {
       if (err) {
