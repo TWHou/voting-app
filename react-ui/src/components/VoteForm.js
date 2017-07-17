@@ -27,10 +27,10 @@ class VoteForm extends Component {
   render() {
     return (
       <form className="d-flex flex-column align-items-center" onSubmit={this.handleSubmit}>
-        <div className="d-flex flex-wrap justify-content-between" data-toggle="buttons">
+        <div className="btn-group-vertical" data-toggle="buttons">
           {this.props.options.map((option) => (
             <label 
-              className={this.state.selected === option ? 'm-2 btn btn-secondary active' : 'm-2 btn btn-secondary'}
+              className={this.state.selected === option ? 'btn btn-secondary active' : 'btn btn-secondary'}
               key={option}
             >
               <input
@@ -45,23 +45,17 @@ class VoteForm extends Component {
           ))}
         </div>
         {localStorage.getItem('token') && (
-          <div className="form-group row align-items-center">
-            <label htmlFor="new-option" className="col-4 col-form-label">
-              Add Your Own:
-            </label>
-            <div className="col-8">
-              <input
-                className="form-control"
-                type="text"
-                name="new-option"
-                id="new-option"
-                value={this.state.input}
-                onChange={this.handleNewOpt}
-              />
-            </div>
-          </div>
+          <input
+            className="form-control"
+            type="text"
+            name="new-option"
+            id="new-option"
+            placeholder="Add Your Own"
+            value={this.state.input}
+            onChange={this.handleNewOpt}
+          />
         )}
-        <button className="btn btn-default" type="submit">Vote</button>
+        <button className="btn btn-default btn-block" type="submit">Vote</button>
       </form>
     );
   }

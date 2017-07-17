@@ -60,6 +60,7 @@ class Poll extends Component {
   }
   
   render() {
+    const showDelete = this.state.owner && this.props.history;
     const randColor = () => '#'+Math.floor(Math.random()*16777215).toString(16);
     const options = this.state.options.reduce((obj, item) => {
       obj.labels.push(item.name);
@@ -70,13 +71,13 @@ class Poll extends Component {
     return (
       <div className="d-flex flex-column justify-content-between">
         <h2>{this.state.title}</h2>
-        <div className="row flex-nowrap justify-content-around align-items-center">
-          <VoteForm className="col-4" onVote={this.handleVote} options={options.labels} />
-          <div className="col-8">
+        <div className="row justify-content-center my-3">
+          <div className="col-md-8 my-2">
             <Polar data={options} />
           </div>
+          <VoteForm className="col-md-4 my-2" onVote={this.handleVote} options={options.labels} />
         </div>
-        {this.state.owner && (this.state.confDel ? (
+        {showDelete && (this.state.confDel ? (
             <div className="bg-warning text-white p-3 text-center rounded">
               <h4>Are you sure? This cannot be undone!</h4>
               <button

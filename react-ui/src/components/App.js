@@ -125,7 +125,7 @@ class App extends Component {
     return (
       <div className="container">
         <Header username={this.state.username} />
-        <main>
+        <main className="my-3">
           <Route exact path='/' render={() => (
             <Home polls={this.state.polls} />
           )}/>
