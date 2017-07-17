@@ -27,7 +27,7 @@ class VoteForm extends Component {
   render() {
     return (
       <form className="d-flex flex-column align-items-center" onSubmit={this.handleSubmit}>
-        <div className="btn-group-vertical" data-toggle="buttons">
+        <div className="btn-group-vertical w-100" data-toggle="buttons">
           {this.props.options.map((option) => (
             <label 
               className={this.state.selected === option ? 'btn btn-secondary active' : 'btn btn-secondary'}
@@ -55,7 +55,7 @@ class VoteForm extends Component {
             onChange={this.handleNewOpt}
           />
         )}
-        <button className="btn btn-default btn-block" type="submit">Vote</button>
+        <button className="btn btn-success btn-block mt-3" type="submit">Vote</button>
       </form>
     );
   }

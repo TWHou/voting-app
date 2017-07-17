@@ -55,7 +55,7 @@ class NewPoll extends Component {
     const optClass = this.state.err.options ? 'form-group has-danger' : 'form-group';
     const options = this.state.options.map((option, i) => (
       <div className={optClass} key={i}>
-        <label htmlFor={'option' + (i+1)}>Option {i+1}</label>
+        <label className="sr-only" htmlFor={'option' + (i+1)}>Option {i+1}</label>
         <input
           type="text"
           className="form-control"
@@ -63,36 +63,44 @@ class NewPoll extends Component {
           value={option.name}
           onChange={e => this.updateOption(e, i)}
           name={'option' + (i+1)}
-          placeholder="Option"/>
+          placeholder={'Option ' + (i+1)}/>
       </div>
     ));
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <div className={titleErr ? 'form-group has-danger' : 'form-group'}>
-            <label htmlFor="title">Title</label>
-            <input 
-              type="text"
-              className="form-control"
-              id="title"
-              name="title"
-              value={this.state.title}
-              onChange={this.updateTitle}
-              placeholder="Title for Your Poll"
-            />
-            {titleErr && (
-              <div className="form-control-feedback">
-                {this.state.err.title}
-                {this.props.pollErr}
-              </div>
-            )}
+      <div className="container">
+        <form onSubmit={this.handleSubmit} className="row no-gutters">
+          <div className="col-8">
+            <div className={titleErr ? 'form-group has-danger' : 'form-group'}>
+              <label htmlFor="title">Title</label>
+              <input 
+                type="text"
+                className="form-control"
+                id="title"
+                name="title"
+                value={this.state.title}
+                onChange={this.updateTitle}
+                placeholder="Title for Your Poll"
+              />
+              {titleErr && (
+                <div className="form-control-feedback">
+                  {this.state.err.title}
+                  {this.props.pollErr}
+                </div>
+              )}
+            </div>
+            <label>Options</label>
+
+            {options}
+            <p className="text-danger">{this.state.err.options}</p>
           </div>
-          {options}
-          <p className="text-danger">{this.state.err.options}</p>
-          <input type="submit" value="Add Poll" />
+          <div className="col-4 px-1 mt-5">
+            <input className="btn btn-primary btn-block" type="submit" value="Add Poll" />
+            <div className="btn-group-vertical w-100 my-1">
+              <button type="button" className="btn btn-secondary" onClick={this.addOpt}>+ Option</button>
+              <button type="button" className="btn btn-secondary" onClick={this.removeOpt}>- Option</button>
+            </div>
+          </div>
         </form>
-        <button onClick={this.addOpt}>Add Option</button>
-        <button onClick={this.removeOpt}>Remove Option</button>
       </div>
     );
   }

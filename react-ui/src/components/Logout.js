@@ -10,10 +10,12 @@ class Logout extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} className="alert alert-warning">
         <h3>Are you sure you want to log out?</h3>
-        <input type="submit" value="Logout" />
-         <button onClick={this.props.history.goBack}>Cancel</button> 
+        <div className="btn-group">
+          <button type="submit" className="btn btn-primary">Logout</button>
+          <button type="button" className="btn btn-secondary" onClick={this.props.history.goBack}>Cancel</button> 
+        </div>
       </form>
     );
   }

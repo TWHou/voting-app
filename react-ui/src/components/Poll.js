@@ -78,7 +78,7 @@ class Poll extends Component {
           <VoteForm className="col-md-4 my-2" onVote={this.handleVote} options={options.labels} />
         </div>
         {showDelete && (this.state.confDel ? (
-            <div className="bg-warning text-white p-3 text-center rounded">
+            <div className="alert alert-danger">
               <h4>Are you sure? This cannot be undone!</h4>
               <button
                 type="button"
@@ -87,7 +87,7 @@ class Poll extends Component {
               >Yes, delete this poll!</button>
               <button
                 type="button"
-                className="btn btn-block"
+                className="btn btn-secondary btn-block"
                 onClick={this.toggleDel}
               >No! Please don't take my poll away.</button>
             </div>
