@@ -21,6 +21,7 @@ class App extends Component {
     regErr: {},
     loginErr: '',
     pollErr: '',
+    genErr: '',
     polls: []
   }
 
@@ -38,10 +39,11 @@ class App extends Component {
       }
     })
     .catch((err) => {
-      console.error(err);
       const error = err.response.data.error;
       if (error.name === 'UserExistsError' || error.message === 'User validation failed: username: Error, expected username to be unique.') {
         this.setState({regErr: {username: 'Sorry, that username is taken. Try another?'}});
+      } else {
+        this.props.history.push('/', {genErr: 'Something went wrong 😢. Please try again later.'});
       }
     });
   }
@@ -57,10 +59,11 @@ class App extends Component {
       }
     })
     .catch((err) => {
-      console.error(err);
       const msg = err.response.data.message;
       if (msg === 'Password or username are incorrect') {
         this.setState({loginErr: msg});
+      } else {
+        this.props.history.push('/', {genErr: 'Something went wrong 😢. Please try again later.'});
       }
     });
   }
@@ -77,7 +80,7 @@ class App extends Component {
       }
     })
     .catch((err) => {
-      console.error(err);
+      this.props.history.push('/', {genErr: 'Something went wrong 😢. Please try again later.'});
     });
   }
 
@@ -91,10 +94,11 @@ class App extends Component {
       this.props.history.push('/user');
     })
     .catch((err) => {
-      console.error(err);
       const msg = err.response.data.message;
       if (msg === 'Poll validation failed: title: Error, expected title to be unique.') {
         this.setState({pollErr: 'This poll already exist, you can add your options to it.'});
+      } else {
+        this.props.history.push('/', {genErr: 'Something went wrong 😢. Please try again later.'});
       }
     });
   } 
@@ -125,6 +129,7 @@ class App extends Component {
     return (
       <div className="container">
         <Header username={this.state.username} />
+        {this.state.genErr && (<div className="alert alert-warning">{this.state.genErr}</div>)}
         <main className="my-3">
           <Route exact path='/' render={() => (
             <Home polls={this.state.polls} />

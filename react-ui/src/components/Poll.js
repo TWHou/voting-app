@@ -40,7 +40,7 @@ class Poll extends Component {
       this.props.history.push('/user');
     })
     .catch((err) => {
-      console.error(err);
+      this.props.history.push('/', {genErr: 'Something went wrong 😢. Please try again later.'});
     });
   }
 

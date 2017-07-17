@@ -9,7 +9,7 @@ class Header extends Component {
   render() {
     const username = this.props.username;
     return (
-      <nav className="navbar navbar-toggleable-md navbar-light bg-faded">
+      <nav className="navbar navbar-toggleable-md navbar-light bg-faded align-items-baseline">
         <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarContent">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -23,7 +23,7 @@ class Header extends Component {
               <NavLink activeClassName='active' to='/polls' exact className="nav-link p-2">All Polls</NavLink>
             </li>
           </ul>
-          <div className="">
+          <div className="d-sm-inline-flex align-items-baseline">
             {username ? <UserMenu username={username}/> : 'Welcome'}
             {username ? <Link to="/logout" className="btn">Logout</Link> : <div><Link to="/login" className="btn">Login</Link><Link to="/register" className="btn">Sign Up</Link></div>}
           </div>
